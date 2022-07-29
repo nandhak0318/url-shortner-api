@@ -27,4 +27,6 @@ const LinkSchema = new mongoose.Schema({
     required: [true, `you need to specify the expire time`],
   },
 })
+
+LinkSchema.index({ key: 'text' })
 module.exports = mongoose.model('Link', LinkSchema)

@@ -6,4 +6,6 @@ const UserSchema = new mongoose.Schema({
   links: [{ type: String, ref: 'Link' }],
 })
 
+UserSchema.index({uid:1})
+
 module.exports = mongoose.model('User', UserSchema)

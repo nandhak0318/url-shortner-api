@@ -7,9 +7,8 @@ const User = require('../models/user.model')
 const getLink = async (req, res) => {
   const { key } = req.params
   const link = await Link.findOne({ key: key })
-  console.log(link)
   if (!link) {
-    return res.send('url not found')
+    return res.status(404).json({ msg: 'url not found' })
   }
   const clickedAt = Date.now()
   link.clicks.push(clickedAt)
@@ -18,15 +17,16 @@ const getLink = async (req, res) => {
     await link.save()
     return res
       .status(StatusCodes.NOT_FOUND)
-      .send('requested url not found or may be expires')
+      .json({ msg: 'requested url not found or may be expires' })
   }
   link.hits = link.hits - 1
   await link.save()
-  return res.send(link.link)
+  return res.status(200).json({ link: link.link })
 }
 
 const shortLink = async (req, res) => {
   const response = {}
+  console.log(req.body)
   const { link, hits, expiresIn } = req.body
   if (!link || link === '') {
     throw new customErrors.badRequestError(`link cannot be empty`)
@@ -90,7 +90,9 @@ const getHistory = async (req, res) => {
     response.history = []
     return res.status(200).json(response)
   }
+
   response.history = user.links
+  response.history.reverse()
   return res.status(200).json(response)
 }
 const createUser = async (req, res) => {

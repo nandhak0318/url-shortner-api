@@ -45,8 +45,6 @@ if (process.env.APP_ENV == 'development') {
 
 const router = require('./routes')
 
-app.use('/', router)
-
 app.get('/health', async (req, res) => {
   res.status(200).send({
     uptime: process.uptime(),
@@ -54,6 +52,8 @@ app.get('/health', async (req, res) => {
     timestamp: Date.now(),
   })
 })
+
+app.use('/', router)
 
 app.use(errorHandler)
 

@@ -59,7 +59,7 @@ app.use(errorHandler)
 
 const port = process.env.PORT || 3000
 const start = async () => {
-  await connect('mongodb://127.0.0.1:27017/urlshortner')
+  await connect(process.env.LIVE_DB)
   app.listen(port, () => {
     console.log(`app is listening on port: ${port}`)
   })

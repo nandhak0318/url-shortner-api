@@ -21,7 +21,10 @@ const getLink = async (req, res) => {
   }
   link.hits = link.hits - 1
   await link.save()
-  return res.status(200).json({ link: link.link })
+  if (link.link[0] != 'h') {
+    link.link = 'https://' + link.link
+  }
+  return res.status(301).redirect(link.link)
 }
 
 const shortLink = async (req, res) => {
@@ -67,7 +70,7 @@ const shortLink = async (req, res) => {
     body.hits = hits
   }
   const createLink = await Link.create(body)
-  const shortenLink = process.env.DOMAIN_NAME + '/' + key
+  const shortenLink =  key
   if (createLink?.createdBy) {
     const user = await User.findOne({ uid: createLink.createdBy })
     user.links.push(createLink._id)
